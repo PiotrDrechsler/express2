@@ -1,0 +1,28 @@
+{
+  "name": "express2",
+  "version": "1.0.0",
+  "description": "exercise repo",
+  "main": "index.js",
+  "scripts": {
+    "test": "start",
+    "start": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PiotrDrechsler/express2.git"
+  },
+  "author": "Piotr_Drechsler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PiotrDrechsler/express2/issues"
+  },
+  "homepage": "https://github.com/PiotrDrechsler/express2#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "joi": "^17.8.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}
