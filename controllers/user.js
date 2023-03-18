@@ -1,19 +1,21 @@
-const { User } = require("../models/user.js");
+const { User } = require("../models/user");
 
 const userStorage = [];
 
-const createUser = (id, name, age) => {
-  const user = new User(id, name, age);
-  userStorage.push(user);
+const createUser = async (name, age) => {
+  const user = new User({ name, age });
+  user.save();
   return user;
 };
 
-const getAllUsers = () => {
-  return userStorage;
+const getAllUsers = async () => {
+  const users = await User.find();
+  return users;
 };
 
-const getUserById = (id) => {
-  return userStorage.find((u) => u.id == id);
+const getUserById = async (_id) => {
+  const user = await User.findOne({ _id });
+  return user;
 };
 
 const deleteUser = (id) => {

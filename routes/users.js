@@ -6,23 +6,26 @@ const {
   deleteUser,
   updateUser,
 } = require("../controllers/user");
-const { userSchema } = require("../models/user");
+const { userValidationSchema } = require("../models/user");
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const users = getAllUsers();
+    const users = await getAllUsers();
     res.status(200).json(users);
   } catch {
     return res.status(500).send("Something went wrong");
   }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const user = getUserById(id);
+    if (id.length !== 24) {
+      return res.status(400).send("Wrong id provided");
+    }
+    const user = await getUserById(id);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -32,15 +35,15 @@ router.get("/:id", (req, res) => {
   }
 });
 
-router.post("/", (req, res) => {
-  const { error } = userSchema.validate(req.body);
+router.post("/", async (req, res) => {
+  const { error } = userValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
   try {
-    const { name, age, id } = req.body;
-    const user = createUser(id, name, age);
-    return res.status(201).json(user);
+    const { name, age } = req.body;
+    const user = await createUser(name, age);
+    return res.status(200).json(user);
   } catch {
     return res.status(500).send("Something went wrong POST!");
   }
@@ -64,7 +67,7 @@ router.put("/:id", (req, res) => {
   if (!id) {
     return res.status(400).send("Id is required to perform delete");
   }
-  const { error } = userSchema.validate(req.body);
+  const { error } = userValidationSchema.validate(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message);
   }

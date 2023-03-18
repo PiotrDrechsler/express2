@@ -1,17 +1,18 @@
 const Joi = require("joi");
+const mongoose = require("mongoose");
 
-class User {
-  constructor(id, name, age) {
-    this.id = id;
-    this.name = name;
-    this.age = age;
-  }
-}
+const Schema = mongoose.Schema;
 
-const userSchema = Joi.object({
-  id: Joi.number().required(),
+const users = new Schema({
+  name: String,
+  age: Number,
+});
+
+const User = mongoose.model("user", users);
+
+const userValidationSchema = Joi.object({
   name: Joi.string().required(),
   age: Joi.number().integer().required().min(18).max(100),
 });
 
-module.exports = { User, userSchema };
+module.exports = { User, userValidationSchema };
