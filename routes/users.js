@@ -5,7 +5,7 @@ const {
   getUserById,
   deleteUser,
   updateUser,
-} = require("../controllers/user");
+} = require("../controllers/users");
 const { userValidationSchema } = require("../models/user");
 
 const router = express.Router();
@@ -62,7 +62,7 @@ router.delete("/:id", (req, res) => {
   }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).send("Id is required to perform delete");
@@ -71,13 +71,10 @@ router.put("/:id", (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message);
   }
-  const user = getUserById(id);
-  if (!user) {
-    return res.status(404).send("User not found");
-  }
+
   try {
-    updateUser(id, req.body);
-    return res.status(200).send("User sucessfully updated!");
+    const updatedUser = await updateUser(id, req.body);
+    return res.status(200).send(updatedUser);
   } catch {
     return res.status(500).send("Something went wrong PUT!");
   }

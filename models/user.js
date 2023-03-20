@@ -1,12 +1,29 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
+const { tasks } = require("./task");
+
 const Schema = mongoose.Schema;
 
-const users = new Schema({
-  name: String,
-  age: Number,
-});
+const users = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      default: "Uknown User",
+    },
+    age: {
+      type: Number,
+      min: 18,
+      max: 100,
+    },
+    tasks: [tasks],
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
 
 const User = mongoose.model("user", users);
 
