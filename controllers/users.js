@@ -1,10 +1,11 @@
-const { User } = require("../models/user");
+const { User, hashPassword } = require("../models/user");
 
 const userStorage = [];
 
-const createUser = async (name, age) => {
+const createUser = async (email, age, password) => {
+  const hashedPassword = hashPassword(password);
   try {
-    const user = new User({ name, age });
+    const user = new User({ email, age, password: hashedPassword });
     user.save();
     return user;
   } catch (err) {
@@ -19,6 +20,11 @@ const getAllUsers = async () => {
 
 const getUserById = async (_id) => {
   const user = await User.findOne({ _id });
+  return user;
+};
+
+const getUserByEmail = async (email) => {
+  const user = await User.findOne({ email });
   return user;
 };
 
@@ -41,4 +47,5 @@ module.exports = {
   getUserById,
   deleteUser,
   updateUser,
+  getUserByEmail,
 };

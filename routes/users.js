@@ -7,10 +7,11 @@ const {
   updateUser,
 } = require("../controllers/users");
 const { userValidationSchema } = require("../models/user");
+const auth = require("../auth/auth");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const users = await getAllUsers();
     res.status(200).json(users);
@@ -41,8 +42,8 @@ router.post("/", async (req, res) => {
     return res.status(400).send(error.details[0].message);
   }
   try {
-    const { name, age } = req.body;
-    const user = await createUser(name, age);
+    const { email, age, password } = req.body;
+    const user = await createUser(email, age, password);
     return res.status(200).json(user);
   } catch {
     return res.status(500).send("Something went wrong POST!");
