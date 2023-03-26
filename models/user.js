@@ -23,7 +23,9 @@ const users = new Schema(
       requried: true,
       min: 6,
     },
-
+    role: {
+      type: String,
+    },
     tasks: [tasks],
   },
   {
@@ -44,6 +46,7 @@ const userValidationSchema = Joi.object({
   email: Joi.string().required().email(),
   age: Joi.number().integer().required().min(18).max(100),
   password: Joi.string().required().min(6),
+  role: Joi.string().required(),
 });
 
 module.exports = { User, userValidationSchema, hashPassword };

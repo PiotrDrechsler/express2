@@ -2,10 +2,10 @@ const { User, hashPassword } = require("../models/user");
 
 const userStorage = [];
 
-const createUser = async (email, age, password) => {
+const createUser = async (email, age, password, role) => {
   const hashedPassword = hashPassword(password);
   try {
-    const user = new User({ email, age, password: hashedPassword });
+    const user = new User({ email, age, password: hashedPassword, role });
     user.save();
     return user;
   } catch (err) {

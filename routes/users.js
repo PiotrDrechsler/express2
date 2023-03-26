@@ -1,6 +1,5 @@
 const express = require("express");
 const {
-  createUser,
   getAllUsers,
   getUserById,
   deleteUser,
@@ -8,10 +7,13 @@ const {
 } = require("../controllers/users");
 const { userValidationSchema } = require("../models/user");
 const auth = require("../auth/auth");
+const { roles } = require("../config");
+
+const { admin, user } = roles;
 
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", auth(admin), async (req, res) => {
   try {
     const users = await getAllUsers();
     res.status(200).json(users);
@@ -20,7 +22,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth(admin), async (req, res) => {
   try {
     const { id } = req.params;
     if (id.length !== 24) {
@@ -50,7 +52,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", auth(admin), (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).send("Id is required to perform delete");
@@ -63,7 +65,7 @@ router.delete("/:id", (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth(admin), async (req, res) => {
   const { id } = req.params;
   if (!id) {
     return res.status(400).send("Id is required to perform delete");
