@@ -1,8 +1,8 @@
 const { Book } = require("../models/book");
 
-const createBook = async (name) => {
+const createBook = async (name, coverImageUrl) => {
   try {
-    const book = new Book({ name });
+    const book = new Book({ name, coverImageUrl });
     book.save();
     return book;
   } catch (err) {

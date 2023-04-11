@@ -10,6 +10,9 @@ const books = new Schema(
       required: true,
       unique: true,
     },
+    coverImageUrl: {
+      type: String,
+    },
   },
   {
     versionKey: false,
